@@ -28,16 +28,13 @@ io.on('connection', socket => {
 	socket.on('disconnect', socket => {
 		console.log('Disconnected');
 	});
-	socket.on('createMsg', msg => {
+	socket.on('createMsg', (msg, callback) => {
 		console.log(msg);
 		io.emit('newMsg', {
 			from: msg.from,
 			text: msg.text
 		});
-		// socket.broadcast.emit('newMsg', {
-		// 	from: msg.from,
-		// 	text: msg.text
-		// });	
+		callback('sent');
 	});	
 });
 
