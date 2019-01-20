@@ -29,14 +29,12 @@ io.on('connection', socket => {
 		console.log(newEmail);
 	});
 
-	socket.emit('newMsg', {
-		from: 'Idrak',
-		text: 'Kire',
-		createdAt: 123
-	});	
-
 	socket.on('createMsg', msg => {
 		console.log(msg);
+		io.emit('newMsg', {
+			from: msg.from,
+			text: msg.text
+		});
 	});	
 });
 
