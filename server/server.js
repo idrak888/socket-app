@@ -16,25 +16,28 @@ app.use(express.static(publicPath));
 io.on('connection', socket => {
 	console.log('new user connected');
 
+	socket.emit('newMsg', {
+		from: 'Admin',
+		text: 'Welcome to the chat app'
+	});
+	socket.broadcast.emit('newMsg', {
+		from: 'Admin',
+		text: 'New user joined'
+	});
+
 	socket.on('disconnect', socket => {
 		console.log('Disconnected');
 	});
-
-	socket.emit('newEmail', {
-		from: 'email@gmail.com',
-		text: 'wazzap'
-	});
-
-	socket.on('createEmail', newEmail => {
-		console.log(newEmail);
-	});
-
 	socket.on('createMsg', msg => {
 		console.log(msg);
 		io.emit('newMsg', {
 			from: msg.from,
 			text: msg.text
 		});
+		// socket.broadcast.emit('newMsg', {
+		// 	from: msg.from,
+		// 	text: msg.text
+		// });	
 	});	
 });
 
