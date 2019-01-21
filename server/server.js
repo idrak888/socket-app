@@ -36,6 +36,13 @@ io.on('connection', socket => {
 		});
 		callback('sent');
 	});	
+	socket.on('createLocationMsg', (coords) => {
+		io.emit('generateLocationMsg', {
+			from: 'Admin',
+			lat: coords.latitude, 
+			long: coords.longitude
+		});
+	});
 });
 
 
