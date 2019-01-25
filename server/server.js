@@ -2,6 +2,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
 const path = require('path');
+const moment = require('moment');
 
 var app = express();
 var server = http.createServer(app);
@@ -32,7 +33,8 @@ io.on('connection', socket => {
 		console.log(msg);
 		io.emit('newMsg', {
 			from: msg.from,
-			text: msg.text
+			text: msg.text,
+			createdAt: moment().valueOf()
 		});
 		callback('sent');
 	});	
@@ -40,7 +42,8 @@ io.on('connection', socket => {
 		io.emit('generateLocationMsg', {
 			from: 'Admin',
 			lat: coords.latitude, 
-			long: coords.longitude
+			long: coords.longitude,
+			createdAt: moment().valueOf()
 		});
 	});
 });

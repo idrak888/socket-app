@@ -24,24 +24,28 @@ socket.on('disconnect', function() {
 });
 
 socket.on('newMsg', function(msg) {
+	var time = moment(msg.createdAt).format('h:mm a');
+
 	const messages = document.getElementById('messages');
 	var li = document.createElement('li');
-	li.innerHTML = msg.from + ': ' + msg.text;
+	li.innerHTML = msg.from + ' ' + time + ': ' + msg.text;
 	messages.appendChild(li);
+
 });
 
 socket.on('generateLocationMsg', function(data) {
 	const messages = document.getElementById('messages');
+	var time = moment(data.createdAt).format('h:mm a');
+
 	var li = document.createElement('li');
 	var a = document.createElement('a');
 	var url = `https://www.google.com/maps?q=${data.lat},${data.long}`;
 	a.innerHTML = 'My location';
-	li.innerHTML = data.from + ': ';
+	li.innerHTML = data.from + ' ' + time + ': ';
 	a.href = url;
 	a.target = '_blank';
 	li.appendChild(a);
-	messages.appendChild(li);
-	
+	messages.appendChild(li);	
 });
 
 var locationBtn = document.querySelector('.sendLocation');
