@@ -11,6 +11,8 @@ form.addEventListener('submit', (e) => {
 	}, function (data) {
 		console.log(data);
 	});
+
+	msg.value = '';
 });
 
 socket.on('connect', function() {
@@ -44,9 +46,13 @@ socket.on('generateLocationMsg', function(data) {
 
 var locationBtn = document.querySelector('.sendLocation');
 
-locationBtn.addEventListener('click', () => {
+locationBtn.addEventListener('click', e => {
+	e.target.disabled = true;
+	e.target.innerHTML = 'Sending...'
+
 	navigator.geolocation.getCurrentPosition((position) => {
-		console.log(position.coords);
+		e.target.disabled = false;
+		e.target.innerHTML = 'Send location';
 		socket.emit('createLocationMsg', {
 			latitude: position.coords.latitude,
 			longitude: position.coords.longitude
