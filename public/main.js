@@ -16,7 +16,16 @@ form.addEventListener('submit', (e) => {
 });
 
 socket.on('connect', function() {
-	console.log('Connected');
+	let params = jQuery.deparam(window.location.search);
+
+	socket.emit('join', params, (err) => {
+		if (err) {
+			alert(err);
+			window.location.href = '/';
+		}else {
+			console.log('No error');
+		}
+	});
 });
 
 socket.on('disconnect', function() {
@@ -28,14 +37,12 @@ socket.on('newMsg', function(msg) {
 	const messages = document.getElementById('messages');
 	
 	var msgTemplate = $('#msg-template').html();
-	console.log(msgTemplate);
 
 	var html = Mustache.render(msgTemplate, {
 		text: msg.text,
 		from: msg.from,
 		time: time
 	});
-	console.log(html);
 	var li = document.createElement('li');
 	li.innerHTML = html;
 

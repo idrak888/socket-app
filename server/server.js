@@ -17,15 +17,6 @@ app.use(express.static(publicPath));
 io.on('connection', socket => {
 	console.log('new user connected');
 
-	socket.emit('newMsg', {
-		from: 'Admin',
-		text: 'Welcome to the chat app'
-	});
-	socket.broadcast.emit('newMsg', {
-		from: 'Admin',
-		text: 'New user joined'
-	});
-
 	socket.on('disconnect', socket => {
 		console.log('Disconnected');
 	});
@@ -45,6 +36,20 @@ io.on('connection', socket => {
 			long: coords.longitude,
 			createdAt: moment().valueOf()
 		});
+	});
+	socket.on('join', (params, callback) => {
+		socket.join(params.room);
+		socket.emit('newMsg', {
+			from: 'Admin',
+			text: 'Welcome to the chat app!',
+			createdAt: moment().valueOf()
+		});
+		socket.broadcast.to(params.room).emit('newMsg', {
+			from: 'Admin',
+			text: params.name + ' joined.',
+			createdAt: moment().valueOf()
+		});
+		callback();
 	});
 });
 
